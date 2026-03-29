@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 320px;
+      background: #0f0f0f;
+      color: #f0f0f0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px;
+    }
+    .header {
+      padding: 14px 16px;
+      background: #111;
+      border-bottom: 1px solid #222;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    label { color: #888; font-size: 12px; margin-bottom: 4px; display: block; }
+    input {
+      width: 100%;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: #f0f0f0;
+      font-size: 13px;
+      outline: none;
+    }
+    input:focus { border-color: #7c3aed; }
+    button {
+      width: 100%;
+      background: #7c3aed;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    button:hover { background: #6d28d9; }
+    .status { font-size: 12px; color: #4ade80; text-align: center; min-height: 18px; }
+    .hint { font-size: 11px; color: #555; line-height: 1.5; }
+    a { color: #7c3aed; }
+  </style>
+</head>
+<body>
+  <div class="header">✨ Image to Prompt — 设置</div>
+  <div class="body">
+    <div>
+      <label>Anthropic API Key</label>
+      <input type="password" id="apiKey" placeholder="sk-ant-...">
+    </div>
+    <button id="save">保存</button>
+    <div class="status" id="status"></div>
+    <div class="hint">
+      在任意图片上右键 → <b>Generate Image Prompt ✨</b><br><br>
+      获取 API Key：<a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a>
+    </div>
+  </div>
+  <script>
+    const keyInput = document.getElementById('apiKey');
+    const status = document.getElementById('status');
+
+    // 加载已保存的 key
+    chrome.storage.sync.get('apiKey', ({ apiKey }) => {
+      if (apiKey) keyInput.value = apiKey;
+    });
+
+    document.getElementById('save').addEventListener('click', () => {
+      const key = keyInput.value.trim();
+      if (!key) { status.style.color = '#f87171'; status.textContent = '请输入 API Key'; return; }
+      chrome.storage.sync.set({ apiKey: key }, () => {
+        status.style.color = '#4ade80';
+        status.textContent = '✓ 已保存';
+        setTimeout(() => status.textContent = '', 2000);
+      });
+    });
+  </script>
+</body>
+</html>
