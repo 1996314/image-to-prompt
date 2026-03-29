@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Image to Prompt",
+  "version": "1.0",
+  "description": "Right-click any image to generate an AI image prompt using Claude",
+  "permissions": ["contextMenus", "scripting", "activeTab", "storage"],
+  "host_permissions": ["https://api.anthropic.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Image to Prompt Settings"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
