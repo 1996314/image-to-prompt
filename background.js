@@ -1,10 +1,19 @@
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
-    id: "image-to-prompt",
-    title: "Generate Image Prompt ✨",
-    contexts: ["image"]
+// 每次 Service Worker 启动时重新注册菜单
+function registerContextMenu() {
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({
+      id: "image-to-prompt",
+      title: "Generate Image Prompt ✨",
+      contexts: ["image"]
+    });
   });
-});
+}
+
+chrome.runtime.onInstalled.addListener(registerContextMenu);
+chrome.runtime.onStartup.addListener(registerContextMenu);
+
+// Service Worker 激活时也注册
+registerContextMenu();
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId !== "image-to-prompt") return;
